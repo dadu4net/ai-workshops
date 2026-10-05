@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Werkboek week 2 – AI-activatieprogramma Florijnz</title>
+<style>
+:root{--bg:#f5f8fc;--card:#fff;--ink:#12244d;--mut:#5b6b8c;--line:#d5deec;--acc:#2260e0;--cy:#00c8f0;--ok:#157a4b;--hd:#e8f1fb}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1730;--card:#14213f;--ink:#e6edfb;--mut:#9fb0d3;--line:#2b3b61;--acc:#6da0ff;--hd:#1b2c53;--ok:#5fd09a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Segoe UI",system-ui,-apple-system,Arial,sans-serif}
+header{background:linear-gradient(100deg,#00c8f0,#2260e0 60%,#3a4fd0);color:#fff;padding:36px 20px 28px}
+.w{max-width:900px;margin:0 auto}
+header h1{margin:0 0 6px;font-size:2rem;font-weight:500;letter-spacing:-.01em}
+header p{margin:0;opacity:.95;max-width:62ch}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:18px}
+.who input{background:rgba(255,255,255,.95);color:#12244d;border:0}
+main{padding:20px}
+section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:20px;margin:0 0 18px}
+h2{margin:0 0 4px;font-size:1.3rem;font-weight:600}
+h3{margin:14px 0 6px;font-size:1rem}
+.sub{color:var(--mut);margin:0 0 14px;font-size:.93rem}
+label{display:block;font-weight:600;font-size:.9rem;margin:10px 0 3px}
+label small{font-weight:400;color:var(--mut)}
+input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:5px;padding:7px 9px}
+textarea{min-height:68px;resize:vertical}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th{background:var(--hd);text-align:left;padding:7px 8px;font-weight:600}
+td{padding:5px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.tw{overflow-x:auto}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.card{border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:10px 0}
+.card h3{margin-top:0}
+.tot{font-weight:700;text-align:center;white-space:nowrap}
+tr.top{background:var(--hd)}
+tr.top .tot{color:var(--ok)}
+.chk{display:flex;gap:9px;align-items:flex-start;padding:5px 0}
+.chk input{width:auto;margin-top:5px}
+.bar{height:10px;background:var(--hd);border-radius:5px;overflow:hidden;margin:8px 0 4px}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+.note{border-left:4px solid var(--cy);background:var(--hd);padding:9px 12px;border-radius:0 6px 6px 0;font-size:.92rem;margin:10px 0}
+button{font:inherit;background:var(--acc);color:#fff;border:0;border-radius:5px;padding:8px 14px;cursor:pointer}
+button.g{background:transparent;color:var(--acc);border:1px solid var(--acc)}
+.bt{display:flex;gap:10px;flex-wrap:wrap}
+footer{max-width:900px;margin:0 auto;padding:0 20px 40px;color:var(--mut);font-size:.85rem}
+@media (max-width:640px){.two{grid-template-columns:1fr}header h1{font-size:1.6rem}}
+@media print{header{background:none;color:#000;padding:0 0 10px}.bt,.nop{display:none}body{background:#fff}section{break-inside:avoid;border-color:#bbb}input,textarea,select{border-color:#bbb}}
+</style>
+</head>
+<body>
+<header><div class="w">
+<h1>Werkboek week 2: van experiment naar keuze</h1>
+<p>Blok 1 – Fundament, veiligheid en taakselectie. Deze week rond je de praktijkopdracht af en kies je samen met de programmabegeleider welke use cases doorgaan naar blok 2.</p>
+<div class="who">
+<input id="naam" placeholder="Naam deelnemer" aria-label="Naam deelnemer">
+<input id="team" placeholder="Team / afdeling" aria-label="Team">
+<input id="datum" type="date" aria-label="Datum">
+</div></div></header>
+
+<main class="w">
+
+<section>
+<h2>Jouw week in het kort</h2>
+<p class="sub">Doel: je begrijpt de basis, werkt verantwoord en herkent geschikte taken. Elke deliverable heeft een status (Niet gestart, In uitvoering, Ter review, Goedgekeurd, Gestopt).</p>
+<div class="tw"><table id="ov"><tr><th>Deliverable</th><th>Acceptatiecriterium</th><th style="width:150px">Status</th></tr></table></div>
+<div class="note">Praktijkopdracht: kies drie dagelijkse taken en voer per taak minimaal één gecontroleerd AI-experiment uit. Leg vast wat je oorspronkelijke aanpak was, welk hulpmiddel je gebruikte, welke controle nodig was en of de output bruikbaar was.</div>
+</section>
+
+<section>
+<h2>1. Persoonlijk AI-startprofiel</h2>
+<p class="sub">Rond af en bespreek met de programmabegeleider. Volledig ingevuld = klaar.</p>
+<div class="two">
+<div><label for="p1">Mijn ervaring met AI tot nu toe</label><textarea id="p1"></textarea></div>
+<div><label for="p2">Mijn verwachtingen van dit programma</label><textarea id="p2"></textarea></div>
+<div><label for="p3">Mijn zorgen of vragen</label><textarea id="p3"></textarea></div>
+<div><label for="p4">Hoe vaak gebruik ik AI nu?</label>
+<select id="p4"><option value="">Kies…</option><option>Nooit</option><option>Af en toe</option><option>Wekelijks</option><option>Meerdere keren per week</option><option>Dagelijks</option></select></div>
+</div>
+</section>
+
+<section>
+<h2>2. Veilige-gebruik checklist</h2>
+<p class="sub">Sluit aan op de kaders van jouw organisatie. Twijfel je? Gebruik de escalatieroute en voer niets in.</p>
+<div class="two">
+<div><label for="v1">Dit voer ik wel in <small>(bijv. eigen concepttekst, openbare informatie)</small></label><textarea id="v1"></textarea></div>
+<div><label for="v2">Dit voer ik nooit in <small>(bijv. persoonsgegevens, vertrouwelijke klantinformatie)</small></label><textarea id="v2"></textarea></div>
+<div><label for="v3">Zo controleer ik de output <small>(feiten, bronnen, toon, privacy)</small></label><textarea id="v3"></textarea></div>
+<div><label for="v4">Hier escaleer ik bij twijfel <small>(naam of afdeling: IT, privacy, security)</small></label><textarea id="v4"></textarea></div>
+</div>
+<h3>Zelftoets</h3>
+<div class="chk"><input type="checkbox" id="z1"><label for="z1" style="margin:0;font-weight:400">Ik weet welke informatie ik niet mag invoeren.</label></div>
+<div class="chk"><input type="checkbox" id="z2"><label for="z2" style="margin:0;font-weight:400">Ik controleer feiten en bronnen voordat ik output gebruik.</label></div>
+<div class="chk"><input type="checkbox" id="z3"><label for="z3" style="margin:0;font-weight:400">Ik herken onjuiste of onvoldoende onderbouwde output.</label></div>
+<div class="chk"><input type="checkbox" id="z4"><label for="z4" style="margin:0;font-weight:400">Ik weet bij wie ik terecht kan bij twijfel of een incident.</label></div>
+</section>
+
+<section>
+<h2>3. Use-case longlist</h2>
+<p class="sub">Minimaal 5 concrete, terugkerende werktaken. Zoek naar taken die repetitief, tekst- of informatie-intensief zijn.</p>
+<div class="tw"><table id="ll"><tr><th>Taak</th><th style="width:150px">Frequentie</th><th style="width:170px">Proceseigenaar</th></tr></table></div>
+</section>
+
+<section>
+<h2>4. Use-case prioritering</h2>
+<p class="sub">Geef elke taak een score van 1 (laag) tot 5 (hoog). Bij risico telt een lage score beter: het totaal gebruikt 6 min je risicoscore. De top 3 kleurt automatisch.</p>
+<div class="tw"><table id="pr"><tr><th>Taak</th><th>Waarde</th><th>Risico</th><th>Frequentie</th><th>Haalbaarheid</th><th>Totaal</th></tr></table></div>
+<label for="pm">Waarom is dit mijn top 3? <small>(korte motivatie)</small></label><textarea id="pm"></textarea>
+</section>
+
+<section>
+<h2>5. Eerste promptkaart</h2>
+<p class="sub">Kies je beste use case en schrijf de prompt uit. Een goede kaart levert controleerbare output op.</p>
+<label for="k0">Use case</label><input id="k0">
+<div class="two">
+<div><label for="k1">Doel <small>wat moet de AI opleveren?</small></label><textarea id="k1"></textarea></div>
+<div><label for="k2">Context <small>voor wie, waarom, welke situatie?</small></label><textarea id="k2"></textarea></div>
+<div><label for="k3">Bron <small>welke informatie mag en moet worden gebruikt?</small></label><textarea id="k3"></textarea></div>
+<div><label for="k4">Opdracht <small>welke bewerkingen of denkstappen?</small></label><textarea id="k4"></textarea></div>
+<div><label for="k5">Vorm <small>structuur, lengte, toon, taal</small></label><textarea id="k5"></textarea></div>
+<div><label for="k6">Criteria <small>wanneer is de output goed genoeg?</small></label><textarea id="k6"></textarea></div>
+</div>
+<label for="k7">Controle <small>welke feiten, gegevens en risico's check ik zelf?</small></label><textarea id="k7"></textarea>
+</section>
+
+<section>
+<h2>6. Leerlog week 1-2</h2>
+<p class="sub">Minimaal 3 experimenten vastgelegd: pogingen, resultaat en leerpunt.</p>
+<div id="ln"></div>
+</section>
+
+<section>
+<h2>7. Beslismoment</h2>
+<p class="sub">Bespreek met de programmabegeleider welke use cases doorgaan naar blok 2 en welke worden gestopt, aangepast of eerst door een proceseigenaar moeten worden beoordeeld.</p>
+<div class="tw"><table id="bm"><tr><th>Use case (top 3)</th><th style="width:210px">Besluit</th><th>Motivatie</th></tr></table></div>
+<label for="bn">Afspraken en vervolgacties</label><textarea id="bn"></textarea>
+</section>
+
+<section>
+<h2>Eindcheck blok 1</h2>
+<div id="ec"></div>
+<div class="bar"><i id="bi"></i></div>
+<div id="bt" class="sub">0 van 0 afgerond</div>
+<div class="bt nop"><button onclick="window.print()">Print of bewaar als PDF</button><button class="g" onclick="reset()">Alles wissen</button></div>
+</section>
+</main>
+<footer>Voortgang wordt automatisch bewaard in deze browser. Bron: Voorstel AI-activatieprogramma Florijnz, blok 1.</footer>
+
+<script>
+var KEY="wb-w2-florijnz",S={};
+try{S=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function el(h){var t=document.createElement("template");t.innerHTML=h.trim();return t.content.firstChild}
+function inp(id,ph){return '<input id="'+id+'" placeholder="'+(ph||"")+'">'}
+function sel(id,opts){return '<select id="'+id+'" aria-label="'+id+'"><option value="">Kies…</option>'+opts.map(function(o){return "<option>"+o+"</option>"}).join("")+"</select>"}
+function row(t,cells){var r=document.createElement("tr");r.innerHTML=cells.map(function(c){return "<td>"+c+"</td>"}).join("");document.getElementById(t).appendChild(r);return r}
+
+var D=[["Persoonlijk AI-startprofiel","Volledig ingevuld en besproken"],["Veilige-gebruik checklist","Aansluitend op organisatiekaders"],["Use-case longlist","Minimaal 5 concrete, terugkerende taken"],["Use-case prioritering","Top 3 gekozen en gemotiveerd"],["Eerste promptkaart","Levert controleerbare output op"],["Leerlog week 1-2","Minimaal 3 experimenten vastgelegd"]];
+var ST=["Niet gestart","In uitvoering","Ter review","Goedgekeurd","Gestopt"];
+D.forEach(function(d,i){row("ov",[ "<b>"+d[0]+"</b>",d[1],sel("st"+i,ST)])});
+
+for(var i=0;i<7;i++){row("ll",[inp("lt"+i,i<5?"Taak "+(i+1):"Extra (optioneel)"),sel("lf"+i,["Dagelijks","Wekelijks","Maandelijks","Incidenteel"]),inp("lo"+i)])}
+var N=[1,2,3,4,5];
+for(var i=0;i<7;i++){var r=row("pr",['<span id="pn'+i+'" class="sub">–</span>',sel("pw"+i,N),sel("pk"+i,N),sel("pf"+i,N),sel("ph"+i,N),'<span class="tot" id="pt'+i+'">–</span>']);r.id="pr"+i}
+for(var i=1;i<=3;i++){document.getElementById("ln").appendChild(el('<div class="card"><h3>Experiment '+i+'</h3><div class="two"><div><label for="e'+i+'a">Taak en oorspronkelijke aanpak</label><textarea id="e'+i+'a"></textarea></div><div><label for="e'+i+'b">Hulpmiddel (Copilot, Claude, anders)</label><input id="e'+i+'b"><label for="e'+i+'c">Welke controle was nodig?</label><input id="e'+i+'c"></div><div><label for="e'+i+'d">Resultaat: was de output bruikbaar?</label>'+sel("e"+i+"e",["Ja","Deels","Nee"])+'<textarea id="e'+i+'f" placeholder="Toelichting"></textarea></div><div><label for="e'+i+'g">Leerpunt</label><textarea id="e'+i+'g"></textarea></div></div></div>'))}
+for(var i=0;i<3;i++){row("bm",['<b id="bn'+i+'">Top '+(i+1)+'</b>',sel("bd"+i,["Doorgaan naar blok 2","Aanpassen","Stoppen","Eerst proceseigenaar laten beoordelen"]),inp("bx"+i)])}
+
+var EC=[["Startprofiel ingevuld en besproken"],["Veilige-gebruik checklist sluit aan op organisatiekaders"],["Longlist heeft minimaal 5 taken"],["Top 3 is gekozen en gemotiveerd"],["Promptkaart levert controleerbare output op"],["3 experimenten staan in de leerlog"],["Besluit per use case is genomen"]];
+EC.forEach(function(c,i){document.getElementById("ec").appendChild(el('<div class="chk"><input type="checkbox" id="c'+i+'"><label for="c'+i+'" style="margin:0;font-weight:400">'+c[0]+'</label></div>'))});
+
+function calc(){
+  var sc=[];
+  for(var i=0;i<7;i++){
+    var t=document.getElementById("lt"+i).value.trim();
+    document.getElementById("pn"+i).textContent=t||"–";
+    var w=+val("pw"+i),k=+val("pk"+i),f=+val("pf"+i),h=+val("ph"+i),o=document.getElementById("pt"+i);
+    if(t&&w&&k&&f&&h){var s=w+(6-k)+f+h;o.textContent=s;sc.push([s,i])}else{o.textContent="–"}
+    document.getElementById("pr"+i).className="";
+  }
+  sc.sort(function(a,b){return b[0]-a[0]});
+  var top=sc.slice(0,3);
+  top.forEach(function(x){document.getElementById("pr"+x[1]).className="top"});
+  for(var j=0;j<3;j++){document.getElementById("bn"+j).textContent=top[j]?document.getElementById("lt"+top[j][1]).value:"Top "+(j+1)}
+  var c=document.querySelectorAll("#ec input"),n=0;c.forEach(function(x){if(x.checked)n++});
+  document.getElementById("bi").style.width=(100*n/c.length)+"%";
+  document.getElementById("bt").textContent=n+" van "+c.length+" afgerond";
+}
+function val(id){return document.getElementById(id).value}
+
+document.querySelectorAll("input,textarea,select").forEach(function(e){
+  if(!e.id)return;
+  if(S[e.id]!==undefined){if(e.type==="checkbox")e.checked=S[e.id];else e.value=S[e.id]}
+  var h=function(){S[e.id]=e.type==="checkbox"?e.checked:e.value;save();calc()};
+  e.addEventListener("input",h);e.addEventListener("change",h);
+});
+function reset(){if(confirm("Weet je zeker dat je alle ingevulde gegevens wilt wissen?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}}
+calc();
+</script>
+</body>
+</html>
