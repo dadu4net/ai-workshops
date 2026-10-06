@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Noppa Copilot Workshops</title>
+<style>
+  /* Noppa UX/UI CSS Injection - Unified Component Library */
+  :root {
+    --color-cyan: #00D0F0;
+    --color-sky: #20B0F0;
+    --color-royal: #2060E0;
+    --color-indigo: #3A4FD0;
+    --color-navy: #0F2A66;
+    --color-ink: #1A2440;
+    --color-slate: #6B7280;
+    --color-mist: #E4E9F2;
+    --color-light: #F1F5FB;
+
+    --bg: var(--color-light);
+    --card: #fff;
+    --tx: var(--color-ink);
+    --mu: var(--color-slate);
+    --ac: var(--color-royal);
+    --ac2: var(--color-mist);
+    --bd: var(--color-mist);
+    --ok: var(--color-cyan);
+    --gradient-signature: linear-gradient(90deg, #00D0F0 0%, #20B0F0 30%, #2060E0 70%, #3A4FD0 100%);
+    
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(228, 233, 242, 0.8);
+    --glass-blur: blur(20px);
+    
+    --font-primary: Kentledge, sans-serif, system-ui;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #070D1B;
+      --card: #0B1328;
+      --tx: #FFFFFF;
+      --mu: #94A3B8;
+      --ac: var(--color-sky);
+      --ac2: #16223F;
+      --bd: #16223F;
+      --ok: var(--color-cyan);
+      --glass-bg: rgba(11, 19, 40, 0.85);
+      --glass-border: rgba(22, 34, 63, 0.8);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #070D1B;
+    --card: #0B1328;
+    --tx: #FFFFFF;
+    --mu: #94A3B8;
+    --ac: var(--color-sky);
+    --ac2: #16223F;
+    --bd: #16223F;
+    --ok: var(--color-cyan);
+    --glass-bg: rgba(11, 19, 40, 0.85);
+    --glass-border: rgba(22, 34, 63, 0.8);
+    color-scheme: dark;
+  }
+  
+  html { scroll-padding-top: calc(env(safe-area-inset-top,0px) + 70px); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--tx); font-family: var(--font-primary); font-size: 16px; line-height: 1.5; }
+  
+  /* WCAG Focus */
+  :focus-visible { outline: 2px solid var(--color-royal); outline-offset: 2px; }
+  [data-theme="dark"] :focus-visible { outline: 2px solid var(--color-cyan); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :focus-visible { outline: 2px solid var(--color-cyan); } }
+
+  /* Noppa Header & Glassmorphism */
+  header { position: sticky; top: env(safe-area-inset-top,0px); z-index: 5; background: var(--glass-bg) !important; backdrop-filter: var(--glass-blur) !important; border-bottom: 1px solid var(--glass-border) !important; padding: 10px 16px; }
+  .w { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.05rem; margin: 0 0 6px; }
+  h2 { font-size: 1.15rem; margin: 0 0 4px; color: var(--color-navy); }
+  [data-theme="dark"] h2 { color: #FFFFFF; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) h2 { color: #FFFFFF; } }
+  
+  /* Progress Bar */
+  .bar { height: 8px; background: var(--bd); border-radius: 6px; overflow: hidden; margin-bottom:4px; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+  .pt { font-size: .8rem; color: var(--mu); }
+  
+  /* Shared Base App Layout */
+  nav { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0; }
+  nav a { font-size: .85rem; padding: 4px 10px; border-radius: 14px; background: var(--ac2); color: var(--ac); text-decoration: none; }
+  nav a.done { opacity: 0.7; }
+  section, .card { background: var(--card); border: 1px solid var(--bd); border-radius: 12px; padding: 16px; margin: 16px 0; }
+  .card.done h3 { color: var(--color-cyan); }
+  .sub, .meta, .mut { color: var(--mu); font-size: .9rem; margin: 0 0 10px; }
+  
+  /* Buttons & Forms */
+  .btn { display: inline-block; margin: 4px 6px 0 0; padding: 6px 14px; border-radius: 8px; background: var(--ac); color: #fff; text-decoration: none; font-size: .85rem; border: 0; cursor: pointer; font-family: inherit; font-weight: 500; }
+  .btn.g, .btn.s { background: var(--ac2); color: var(--ac); }
+  textarea, input[type=text], select { width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; background: var(--bg); color: var(--tx); font: inherit; font-size: .92rem; margin-top: 4px; }
+  textarea { min-height: 84px; resize: vertical; }
+  label.l, .rl { display: block; font-size: .9rem; color: var(--tx); margin: 12px 0 4px; font-weight: 600; }
+  label.ck, label:not(.l):not(.rl) { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; margin: 8px 0; font-size: .95rem; }
+  label input[type="checkbox"] { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--ok); }
+  
+  /* Structural Helpers */
+  .st { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--bd); }
+  .st:first-of-type { border-top: 0; }
+  .st input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--ok); }
+  .st.done span.t { color: var(--mu); text-decoration: line-through; }
+  .st div { flex: 1; }
+  
+  /* Tables */
+  .sc, .tw { overflow-x: auto; margin: 12px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td { border: 1px solid var(--bd); padding: 8px; text-align: left; vertical-align: top; }
+  th { background: var(--ac2); color: var(--color-navy); font-weight: 600; }
+  [data-theme="dark"] th { color: #fff; }
+  
+  /* Text / Code / Feedback */
+  pre { background: var(--bg); border: 1px solid var(--bd); border-radius: 8px; padding: 10px; overflow-x: auto; font-size: .85rem; margin: 6px 0; }
+  .pr { background: var(--ac2); border-left: 4px solid var(--color-cyan); padding: 12px; margin: 12px 0; border-radius: 0 8px 8px 0; }
+  .pr code { font-family: monospace; font-size: 0.9em; display: block; margin-bottom: 8px; white-space: pre-wrap; }
+  .tip, .note { background: var(--ac2); border-radius: 8px; padding: 10px 12px; font-size: .9rem; margin: 12px 0; border-left: 4px solid var(--color-cyan); }
+  
+  /* Extended Classes for specific workshops */
+  .tag { display: inline-block; background: var(--color-royal); color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; }
+  .two { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media(min-width: 600px){ .two { grid-template-columns: 1fr 1fr; } }
+  .q { background: var(--bg); border: 1px solid var(--bd); padding: 16px; border-radius: 8px; margin-bottom: 12px; }
+  .o { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .o button { padding: 6px 14px; border-radius: 16px; border: 1px solid var(--color-royal); background: transparent; cursor: pointer; color: var(--color-royal); font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
+  .o button:hover { background: var(--ac2); }
+  .o button.on { background: var(--color-royal); color: #fff; }
+  [data-theme="dark"] .o button { border-color: var(--color-cyan); color: var(--color-cyan); }
+  [data-theme="dark"] .o button.on { background: var(--color-cyan); color: #000; }
+  
+  .fb { margin-top: 8px; font-size: 0.85rem; padding: 6px 10px; border-radius: 6px; display: inline-block; }
+  .fb.ok { color: #fff; background: var(--color-cyan); }
+  .fb.bad, .fb.no { color: #fff; background: #E11D48; } /* Warning Red */
+  
+  .foot { color: var(--mu); font-size: .8rem; text-align: center; margin: 32px 0; }
+  
+  .mod { margin-bottom: 32px; }
+  .mh { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--bd); padding-bottom: 8px; margin-bottom: 16px; }
+  .apps { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  
+  details { border-top: 1px solid var(--bd); padding: 12px 0; }
+  summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
+  
+  /* Footer Component */
+  footer { color: var(--mu); font-size: .85rem; border-top: 1px solid var(--bd); padding: 24px 0; margin-top: 40px; }
+  
+  /* Index card-links */
+  .card-link { display: block; padding: 20px; margin-bottom: 16px; border: 1px solid var(--bd); border-radius: 12px; text-decoration: none; color: var(--tx); transition: transform 0.2s, box-shadow 0.2s; background: var(--card); }
+  .card-link:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); border-color: var(--color-royal); }
+  [data-theme="dark"] .card-link:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.4); border-color: var(--color-cyan); }
+  .card-link strong { display: block; font-size: 1.15rem; color: var(--color-royal); margin-bottom: 6px; }
+  [data-theme="dark"] .card-link strong { color: var(--color-cyan); }
+  
+  /* .artikel-prose additions */
+  .artikel-prose { line-height: 1.8; }
+  .artikel-prose blockquote { border-left: 4px solid var(--color-cyan); background: var(--ac2); padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+  .artikel-prose p { margin-bottom: 16px; }
+  .artikel-prose ul, .artikel-prose ol { padding-left: 24px; margin-bottom: 16px; }
+  .artikel-prose li { margin-bottom: 6px; }
+  .artikel-prose code { background: var(--ac2); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; font-family: monospace; }
+</style>
+</head>
+<body>
+<header>
+  <div class="w" style="display: flex; justify-content: space-between; align-items: center; padding: 0;">
+    <div>
+      <div style="margin:0; font-family: Kentledge, sans-serif; background: var(--gradient-signature); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size:1.5rem; font-weight:bold;">Noppa Solutions</div>
+    </div>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <button onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'" style="background:none; border:none; color:var(--tx); cursor:pointer;" aria-label="Toggle Theme">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="w">
+  <section>
+    <h1>Copilot Workshops</h1>
+    <p>Welkom bij het Noppa Copilot overzicht. Hieronder vind je de beschikbare workshops en documenten. Selecteer een van de opties om te starten. Jouw voortgang in elke sessie wordt automatisch lokaal in je browser opgeslagen.</p>
+    
+    <h2>Beschikbare Modules</h2>
+    
+    <a href="Workshop%20Copilot%20Agents%20%26%20Copilot%20Studio.html" class="card-link">
+      <strong>Workshop Copilot Agents &amp; Copilot Studio</strong>
+      <span>Leer alles over het bouwen en inzetten van Copilot Agents en Copilot Studio in 2,5 uur.</span>
+    </a>
+    <a href="Workshop%20Copilot%20in%20Forms%20en%20Clipchamp.html" class="card-link">
+      <strong>Workshop Copilot in Forms en Clipchamp</strong>
+      <span>Ontdek hoe Copilot je kan ondersteunen bij het maken van formulieren en video's.</span>
+    </a>
+    <a href="Workshop%20Copilot%20in%20Teams%20en%20SharePoint.html" class="card-link">
+      <strong>Workshop Copilot in Teams en SharePoint</strong>
+      <span>Verhoog de productiviteit en samenwerking met Copilot binnen Teams en SharePoint.</span>
+    </a>
+    <a href="Workshop%20Copilot%20Notebooks.html" class="card-link">
+      <strong>Workshop Copilot Notebooks</strong>
+      <span>Duik in het gebruik van Copilot Notebooks voor complexe taken en uitwerkingen.</span>
+    </a>
+    <a href="Workshop%20Copilot-Excel-Word-Powerpoint.html" class="card-link">
+      <strong>Workshop Copilot in Excel, Word &amp; PowerPoint</strong>
+      <span>Haal het maximale uit de Office apps met de inzet van Copilot voor dagelijkse werkzaamheden.</span>
+    </a>
+
+  </section>
+</main>
+
+<footer class="w">
+  <div style="display: flex; justify-content: space-between; flex-wrap: wrap; border-top: 1px solid var(--bd); padding-top: 20px; margin-top: 40px; color: var(--mu); font-size: .85rem; padding-bottom: 40px;">
+    <div>&copy; 2026 Noppa Solutions & Consultants. Alle rechten voorbehouden.</div>
+    <div style="display: flex; gap: 15px;">
+      <a href="#" style="color: var(--tx); text-decoration: none;">Privacy</a>
+      <a href="#" style="color: var(--tx); text-decoration: none;">Cookie Voorwaarden</a>
+      <a href="#" style="color: var(--tx); text-decoration: none;">Toegankelijkheid</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

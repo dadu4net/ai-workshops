@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Copilot-workshop: werkplaats</title>
+<style>
+  /* Noppa UX/UI CSS Injection - Unified Component Library */
+  :root {
+    --color-cyan: #00D0F0;
+    --color-sky: #20B0F0;
+    --color-royal: #2060E0;
+    --color-indigo: #3A4FD0;
+    --color-navy: #0F2A66;
+    --color-ink: #1A2440;
+    --color-slate: #6B7280;
+    --color-mist: #E4E9F2;
+    --color-light: #F1F5FB;
+
+    --bg: var(--color-light);
+    --card: #fff;
+    --tx: var(--color-ink);
+    --mu: var(--color-slate);
+    --ac: var(--color-royal);
+    --ac2: var(--color-mist);
+    --bd: var(--color-mist);
+    --ok: var(--color-cyan);
+    --gradient-signature: linear-gradient(90deg, #00D0F0 0%, #20B0F0 30%, #2060E0 70%, #3A4FD0 100%);
+    
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(228, 233, 242, 0.8);
+    --glass-blur: blur(20px);
+    
+    --font-primary: Kentledge, sans-serif, system-ui;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #070D1B;
+      --card: #0B1328;
+      --tx: #FFFFFF;
+      --mu: #94A3B8;
+      --ac: var(--color-sky);
+      --ac2: #16223F;
+      --bd: #16223F;
+      --ok: var(--color-cyan);
+      --glass-bg: rgba(11, 19, 40, 0.85);
+      --glass-border: rgba(22, 34, 63, 0.8);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #070D1B;
+    --card: #0B1328;
+    --tx: #FFFFFF;
+    --mu: #94A3B8;
+    --ac: var(--color-sky);
+    --ac2: #16223F;
+    --bd: #16223F;
+    --ok: var(--color-cyan);
+    --glass-bg: rgba(11, 19, 40, 0.85);
+    --glass-border: rgba(22, 34, 63, 0.8);
+    color-scheme: dark;
+  }
+  
+  html { scroll-padding-top: calc(env(safe-area-inset-top,0px) + 70px); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--tx); font-family: var(--font-primary); font-size: 16px; line-height: 1.5; }
+  
+  /* WCAG Focus */
+  :focus-visible { outline: 2px solid var(--color-royal); outline-offset: 2px; }
+  [data-theme="dark"] :focus-visible { outline: 2px solid var(--color-cyan); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) :focus-visible { outline: 2px solid var(--color-cyan); } }
+
+  /* Noppa Header & Glassmorphism */
+  header { position: sticky; top: env(safe-area-inset-top,0px); z-index: 5; background: var(--glass-bg) !important; backdrop-filter: var(--glass-blur) !important; border-bottom: 1px solid var(--glass-border) !important; padding: 10px 16px; }
+  .w { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.05rem; margin: 0 0 6px; }
+  h2 { font-size: 1.15rem; margin: 0 0 4px; color: var(--color-navy); }
+  [data-theme="dark"] h2 { color: #FFFFFF; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) h2 { color: #FFFFFF; } }
+  
+  /* Progress Bar */
+  .bar { height: 8px; background: var(--bd); border-radius: 6px; overflow: hidden; margin-bottom:4px; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+  .pt { font-size: .8rem; color: var(--mu); }
+  
+  /* Shared Base App Layout */
+  nav { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0; }
+  nav a { font-size: .85rem; padding: 4px 10px; border-radius: 14px; background: var(--ac2); color: var(--ac); text-decoration: none; }
+  nav a.done { opacity: 0.7; }
+  section, .card { background: var(--card); border: 1px solid var(--bd); border-radius: 12px; padding: 16px; margin: 16px 0; }
+  .card.done h3 { color: var(--color-cyan); }
+  .sub, .meta, .mut { color: var(--mu); font-size: .9rem; margin: 0 0 10px; }
+  
+  /* Buttons & Forms */
+  .btn { display: inline-block; margin: 4px 6px 0 0; padding: 6px 14px; border-radius: 8px; background: var(--ac); color: #fff; text-decoration: none; font-size: .85rem; border: 0; cursor: pointer; font-family: inherit; font-weight: 500; }
+  .btn.g, .btn.s { background: var(--ac2); color: var(--ac); }
+  textarea, input[type=text], select { width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; background: var(--bg); color: var(--tx); font: inherit; font-size: .92rem; margin-top: 4px; }
+  textarea { min-height: 84px; resize: vertical; }
+  label.l, .rl { display: block; font-size: .9rem; color: var(--tx); margin: 12px 0 4px; font-weight: 600; }
+  label.ck, label:not(.l):not(.rl) { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; margin: 8px 0; font-size: .95rem; }
+  label input[type="checkbox"] { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--ok); }
+  
+  /* Structural Helpers */
+  .st { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-top: 1px solid var(--bd); }
+  .st:first-of-type { border-top: 0; }
+  .st input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--ok); }
+  .st.done span.t { color: var(--mu); text-decoration: line-through; }
+  .st div { flex: 1; }
+  
+  /* Tables */
+  .sc, .tw { overflow-x: auto; margin: 12px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td { border: 1px solid var(--bd); padding: 8px; text-align: left; vertical-align: top; }
+  th { background: var(--ac2); color: var(--color-navy); font-weight: 600; }
+  [data-theme="dark"] th { color: #fff; }
+  
+  /* Text / Code / Feedback */
+  pre { background: var(--bg); border: 1px solid var(--bd); border-radius: 8px; padding: 10px; overflow-x: auto; font-size: .85rem; margin: 6px 0; }
+  .pr { background: var(--ac2); border-left: 4px solid var(--color-cyan); padding: 12px; margin: 12px 0; border-radius: 0 8px 8px 0; }
+  .pr code { font-family: monospace; font-size: 0.9em; display: block; margin-bottom: 8px; white-space: pre-wrap; }
+  .tip, .note { background: var(--ac2); border-radius: 8px; padding: 10px 12px; font-size: .9rem; margin: 12px 0; border-left: 4px solid var(--color-cyan); }
+  
+  /* Extended Classes for specific workshops */
+  .tag { display: inline-block; background: var(--color-royal); color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; }
+  .two { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media(min-width: 600px){ .two { grid-template-columns: 1fr 1fr; } }
+  .q { background: var(--bg); border: 1px solid var(--bd); padding: 16px; border-radius: 8px; margin-bottom: 12px; }
+  .o { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .o button { padding: 6px 14px; border-radius: 16px; border: 1px solid var(--color-royal); background: transparent; cursor: pointer; color: var(--color-royal); font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
+  .o button:hover { background: var(--ac2); }
+  .o button.on { background: var(--color-royal); color: #fff; }
+  [data-theme="dark"] .o button { border-color: var(--color-cyan); color: var(--color-cyan); }
+  [data-theme="dark"] .o button.on { background: var(--color-cyan); color: #000; }
+  
+  .fb { margin-top: 8px; font-size: 0.85rem; padding: 6px 10px; border-radius: 6px; display: inline-block; }
+  .fb.ok { color: #fff; background: var(--color-cyan); }
+  .fb.bad, .fb.no { color: #fff; background: #E11D48; } /* Warning Red */
+  
+  .foot { color: var(--mu); font-size: .8rem; text-align: center; margin: 32px 0; }
+  
+  .mod { margin-bottom: 32px; }
+  .mh { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--bd); padding-bottom: 8px; margin-bottom: 16px; }
+  .apps { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  
+  details { border-top: 1px solid var(--bd); padding: 12px 0; }
+  summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
+  
+  /* Footer Component */
+  footer { color: var(--mu); font-size: .85rem; border-top: 1px solid var(--bd); padding: 24px 0; margin-top: 40px; }
+  
+  /* Index card-links */
+  .card-link { display: block; padding: 20px; margin-bottom: 16px; border: 1px solid var(--bd); border-radius: 12px; text-decoration: none; color: var(--tx); transition: transform 0.2s, box-shadow 0.2s; background: var(--card); }
+  .card-link:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); border-color: var(--color-royal); }
+  [data-theme="dark"] .card-link:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.4); border-color: var(--color-cyan); }
+  .card-link strong { display: block; font-size: 1.15rem; color: var(--color-royal); margin-bottom: 6px; }
+  [data-theme="dark"] .card-link strong { color: var(--color-cyan); }
+  
+  /* .artikel-prose additions */
+  .artikel-prose { line-height: 1.8; }
+  .artikel-prose blockquote { border-left: 4px solid var(--color-cyan); background: var(--ac2); padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+  .artikel-prose p { margin-bottom: 16px; }
+  .artikel-prose ul, .artikel-prose ol { padding-left: 24px; margin-bottom: 16px; }
+  .artikel-prose li { margin-bottom: 6px; }
+  .artikel-prose code { background: var(--ac2); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; font-family: monospace; }
+</style>
+</head>
+<body>
+<header>
+  <div class="w" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;">
+    <div>
+      <h1 style="margin:0; font-family: Kentledge, sans-serif; background: var(--gradient-signature); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size:1.5rem;">Noppa Workshops</h1>
+    </div>
+    <div style="display: flex; gap: 10px; align-items: center;">
+      <button onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'" style="background:none; border:none; color:var(--tx); cursor:pointer;" aria-label="Toggle Theme">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="w">
+    <h2 style="font-size:1.15rem;margin:0 0 6px">Copilot-workshop · werkplaats <span class="mut" id="tot"></span></h2>
+    <div class="bar"><i id="pb"></i></div><div class="pt" id="pt"></div>
+  </div>
+</header>
+<main id="app" class="w artikel-prose" style="padding:0 16px"></main>
+<script>
+const L={excel:['https://excel.cloud.microsoft/','ms-excel:'],word:['https://word.cloud.microsoft/','ms-word:'],powerpoint:['https://powerpoint.cloud.microsoft/','ms-powerpoint:']};
+const N={excel:'Excel',word:'Word',powerpoint:'PowerPoint'};
+const CHAT='https://m365.cloud.microsoft/chat';
+const DATA=`Order|Datum|Regio|Productgroep|Verkoper|Aantal|Omzet (€)|Klantopmerking
+1001|2026-07-03|Noord|Warmtepompen|Sanne|4|18400|Snelle levering, monteur was netjes
+1002|2026-07-05|Zuid|Zonnepanelen|Tim|12|15600|Offerte duurde veel te lang
+1003|2026-07-08|Oost|Laadpalen|Sanne|6|8700|Prima service, graag weer
+1004|2026-07-11|West|Warmtepompen|Joris|3|13800|Installatie liep uit, wel goed resultaat
+1005|2026-07-14|Zuid|Laadpalen|Tim|9|12950|App koppelen werkte niet, support nauwelijks bereikbaar
+1006|2026-07-17|Noord|Zonnepanelen|Lotte|15|19500|Zeer tevreden over advies
+1007|2026-07-20|Oost|Warmtepompen|Joris|2|9300|Prijs hoger dan verwacht
+1008|2026-07-23|West|Zonnepanelen|Lotte|10|13100|Alles top geregeld
+1009|2026-07-26|Zuid|Warmtepompen|Tim|5|23100|Geen opmerkingen
+1010|2026-07-29|Noord|Laadpalen|Sanne|7|10400|Factuur klopte niet, later gecorrigeerd
+1011|2026-08-02|Oost|Zonnepanelen|Joris|14|18200|Snel en duidelijk
+1012|2026-08-05|West|Laadpalen|Lotte|4|5900|Monteur kwam te laat
+1013|2026-08-09|Zuid|Zonnepanelen|Tim|11|14300|Goede prijs-kwaliteit
+1014|2026-08-12|Noord|Warmtepompen|Sanne|3|13900|Fijne communicatie
+1015|2026-08-15|Oost|Laadpalen|Joris|8|11600|Niemand reageerde op mijn mail
+1016|2026-08-19|West|Warmtepompen|Lotte|4|18600|Vakkundig en netjes opgeleverd
+1017|2026-08-22|Zuid|Laadpalen|Tim|6|8800|Prima
+1018|2026-08-26|Noord|Zonnepanelen|Sanne|13|16900|Opbrengst valt tegen
+1019|2026-08-29|Oost|Warmtepompen|Joris|2|9400|Heel tevreden, buren willen ook offerte
+1020|2026-09-02|West|Zonnepanelen|Lotte|16|20800|Zeer professioneel`.split('|').join('\t');
+const NOTES=`Gesprek VvE Het Zonneveld, dinsdag, bij voorzitter mevr. De Wit + penningmeester dhr. Aarts
+
+- 48 appartementen, gezamenlijke parkeergarage met 30 plekken, plat dak 600 m2
+- Wens: zonnepanelen op dak voor algemene stroom (lift, verlichting, garage)
+- Daarnaast vragen van bewoners om laadpunten in de garage, nu 9 bewoners met EV
+- Zorg bestuur: kosten, overlast tijdens installatie, wie betaalt de stroom van laadpalen
+- Dak is in 2019 vernieuwd, constructie nog te checken
+- Voorstel van ons: 120 zonnepanelen + 10 laadpalen met lastbalancering
+- Indicatieve investering zonnepanelen: 52.000 euro, laadpalen: 28.000 euro
+- Verwachte terugverdientijd zonnepanelen volgens ons: ca. 7 jaar (aannames nog bevestigen)
+- Penningmeester wil twee opties naast elkaar zien
+- Besluit moet op ALV in november; planning installatie bij voorkeur voorjaar
+- Installatie zonnepanelen duurt ca. 2 weken, laadpalen ca. 1 week
+- Vervolg: constructieberekening aanvragen, offerte uitwerken, bewonersbrief opstellen
+- Contactpersoon bij ons: Sanne. Reactie klant verwacht binnen 2 weken`;
+
+const M=[
+{id:'x',app:'excel',naam:'Excel',tijd:'40 min',intro:'Casus: je analyseert de verkoopcijfers van Brabant Zonne & Warmte BV.',
+ w:['Data samenvatten','Vrije tekst labelen','Formules uitleggen','Draaitabel en grafiek'],o:['Totalen: check met SOM','Voorspellingen op weinig data','Interpretatie van "waarom"'],n:['Enige bron voor audit-cijfers','Beslissingen over personen','Opzoeken wat XLOOKUP kan'],
+ ops:[
+ {t:'Voorbereiding',m:'1 min',copy:['data','Kopieer data (plakt in kolommen)'],s:[`Open Excel (knop hieronder) en maak een nieuwe werkmap; sla op in OneDrive/SharePoint als oefendata-<jouwnaam>`,`Klik op "Kopieer data", selecteer cel A1 en plak met Ctrl+V`,`Selecteer de data, kies Invoegen > Tabel (Ctrl+T), kopteksten aan`,`Geef de tabel de naam Verkoop (tabblad Tabelontwerp)`,`Open Copilot via het pictogram op het Start-lint`]},
+ {t:'Data verkennen',m:'5 min',p:[[``,`Geef een korte samenvatting van deze verkoopdata. Wat zijn de 3 opvallendste dingen? Gebruik alleen de gegevens in de tabel Verkoop. Antwoord in maximaal 5 zinnen.`]],s:[`Plak de prompt in Copilot`,`Stel een vervolgvraag: Welke productgroep levert de meeste omzet per verkochte eenheid?`,`Controle: bereken zelf =SOM(Verkoop[Omzet (€)]). Verwacht € 283.250. Klopt Copilot?`]},
+ {t:'Vrije tekst classificeren',m:'7 min',p:[[``,`Voeg een nieuwe kolom 'Sentiment' toe aan de tabel Verkoop. Classificeer elke Klantopmerking als Positief, Neutraal of Negatief. Als er geen opmerking is of die niets zegt, kies Neutraal. Pas verder niets aan in de tabel.`]],s:[`Plak de prompt`,`Controle: bekijk minimaal 5 rijen kritisch, vooral "Installatie liep uit, wel goed resultaat" en "Prijs hoger dan verwacht"`,`Geef Copilot een criterium (bijvoorbeeld: een klacht over planning of communicatie is Negatief) en laat opnieuw labelen`]},
+ {t:'Draaitabel en grafiek',m:'7 min',p:[[``,`Maak een draaitabel met de totale omzet per regio (rijen) en per productgroep (kolommen). Voeg daarna een gestapeld kolomdiagram toe met een duidelijke titel.`],[`Vervolgprompt`,`Sorteer de regio's van hoog naar laag op totale omzet en gebruik een nette euro-opmaak.`]],s:[`Plak de eerste prompt`,`Plak de vervolgprompt`,`Controle: Noord € 79.100 · Zuid € 74.750 · West € 72.200 · Oost € 57.200 · totaal € 283.250`]},
+ {t:'Grenzen verkennen',m:'6 min',p:[[`Vraag 1`,`Voorspel de omzet voor Q4 voor elke regio.`],[`Vraag 2`,`Welke verkoper moet een bonus krijgen?`],[`Vraag 3`,`Leg uit wat deze formule doet: =SOMMEN.ALS(Verkoop[Omzet (€)];Verkoop[Regio];"Noord")`]],s:[`Vraag 1: hoeveel data zit onder de voorspelling? Geef een kleur 🟢🟠🔴`,`Vraag 2: kan data alleen deze vraag beantwoorden? Geef een kleur`,`Vraag 3: klopt de uitleg? Geef een kleur`]}]},
+{id:'w',app:'word',naam:'Word',tijd:'35 min',intro:'Casus: je schrijft een voorstel voor VvE Het Zonneveld.',
+ w:['Eerste concept uit notities','Herschrijven: korter, toon, B1','Samenvatten + actiepunten'],o:['Bedragen, data en namen','Subsidies en regelgeving','Teksten buiten je eigen vak'],n:['Contracten zonder jurist','Gevoelige persoonlijke berichten','Vertrouwelijke data buiten beleid'],
+ ops:[
+ {t:'Voorbereiding',m:'1 min',copy:['notities','Kopieer notities'],s:[`Open Word (knop hieronder), nieuw leeg document; sla op als voorstel-zonneveld-<jouwnaam>`,`Klik op "Kopieer notities" en plak ze bovenaan het document`,`Open Copilot via Start > Copilot`]},
+ {t:'Concept uit ruwe notities',m:'8 min',p:[[``,`Schrijf een klantvoorstel voor het bestuur van VvE Het Zonneveld op basis van de notities in dit document. Gebruik alleen informatie uit de notities; verzin geen bedragen of data. Structuur: 1. Aanleiding, 2. Ons voorstel, 3. Planning, 4. Investering en terugverdientijd, 5. Vervolgstappen. Toon: zakelijk maar toegankelijk, geschreven voor niet-technische bestuursleden. Maximaal 1,5 pagina.`],[`Vervolgprompt`,`Voeg in hoofdstuk 4 een tabel toe met de opties 'alleen zonnepanelen' en 'zonnepanelen + laadpalen', gebruik alleen bedragen uit de notities.`]],s:[`Plak de eerste prompt`,`Controle: staan er bedragen of data die niet in de notities staan? Waar vult Copilot gaten op?`,`Plak de vervolgprompt`]},
+ {t:'Herschrijven en toon',m:'6 min',p:[[``,`Herschrijf deze alinea op B1-taalniveau, in maximaal 80 woorden. Behoud alle feiten. Gebruik 'u' als aanspreekvorm.`],[`Tweede toon`,`Maak dit enthousiaster, maar niet overdreven commercieel.`]],s:[`Selecteer de alinea "Ons voorstel" en plak de eerste prompt`,`Probeer de tweede toon op dezelfde alinea`,`Kies de versie die bij jouw klant past`]},
+ {t:'Samenvatten en actiepunten',m:'5 min',p:[[``,`Maak een samenvatting van dit voorstel voor mijn directeur, in maximaal 5 bulletpoints. Geef daarna een lijst met actiepunten met voorstel voor eigenaar en termijn. Gebruik alleen informatie uit het document.`],[`Vervolgvraag`,`Welke onderdelen van het voorstel zijn nog onzeker of ontbreken?`]],s:[`Gebruik Chat (vragen over het document) en plak de eerste prompt`,`Stel de vervolgvraag`]},
+ {t:'Feitencheck',m:'5 min',links:[['rvo.nl','https://www.rvo.nl'],['belastingdienst.nl','https://www.belastingdienst.nl']],p:[[``,`Schrijf een korte alinea over actuele subsidies en fiscale regelingen voor zonnepanelen en laadpalen voor een VvE in Nederland.`]],s:[`Laat Copilot de alinea onderaan het document schrijven`,`Controleer elke regeling, elk percentage en elk bedrag op rvo.nl of belastingdienst.nl`,`Noteer wat klopte, verouderd was of zonder bron stond`]}]},
+{id:'p',app:'powerpoint',naam:'PowerPoint',tijd:'40 min',intro:'Casus: je presenteert het voorstel op de ledenvergadering.',
+ w:['Deck uit Word-document','Slide visueler maken','Sprekersnotities','Kritische vragen laten stellen'],o:['Cijfers en grafieken','Titels: scherp genoeg?','Huisstijl bij slordige template'],n:['Strategie en verhaallijn uitbesteden','Presenteren zonder doornemen','Vertrouwelijke info buiten beleid'],
+ ops:[
+ {t:'Voorbereiding',m:'1 min',s:[`Open PowerPoint (knop hieronder), nieuwe presentatie vanuit de huisstijl-template; sla op als presentatie-zonneveld-<jouwnaam>`,`Zorg dat je Word-voorstel in OneDrive of SharePoint staat`,`Open Copilot via Start > Copilot`]},
+ {t:'Presentatie uit Word-document',m:'10 min',p:[[``,`Maak een presentatie van maximaal 6 slides op basis van het document 'voorstel-zonneveld-<jouwnaam>'. Doel: het bestuur van de VvE overtuigen om het voorstel te bespreken op de ledenvergadering. Publiek: niet-technische eigenaren-bewoners. Gebruik de huisstijl van deze presentatie. Houd per slide maximaal 4 bulletpoints of gebruik een visueel element. Geen verzonnen cijfers.`]],s:[`Plak de prompt en kies je Word-voorstel als bron (typ /)`,`Beoordeel elke slide: verhaallijn, te veel tekst, cijfers correct? Geef een kleur 🟢🟠🔴`,`Verwijder of herschrijf minimaal één slide`]},
+ {t:'Eén slide verbeteren',m:'7 min',p:[[``,`Maak deze slide visueler: vervang de tekst door maximaal 3 korte blokken met een pictogram en een kernzin. Behoud de feiten.`],[`Vervolgprompt`,`Maak de titel een duidelijke boodschap in plaats van een onderwerp.`]],s:[`Selecteer de slide met de meeste tekst en plak de eerste prompt`,`Plak de vervolgprompt; gebruik alleen een bewering uit je voorstel, verzin geen cijfer`,`Niet goed? Gebruik Ongedaan maken of kies een andere variant`]},
+ {t:'Sprekersnotities en kritische review',m:'7 min',p:[[`Sprekersnotities`,`Voeg bij elke slide sprekersnotities toe voor een presentatie van 1 minuut per slide. Schrijf in spreektaal en gebruik alleen informatie uit de slides en het voorstel.`],[`Kritische review`,`Je bent een kritisch bestuurslid van de VvE. Welke 5 vragen of bezwaren zou je na deze presentatie stellen? Wat ontbreekt er in mijn verhaal?`]],s:[`Plak de prompt voor sprekersnotities`,`Plak de prompt voor de kritische review`,`Kies de twee beste vragen en pas je presentatie of notities aan`]},
+ {t:'Cijfers controleren',m:'4 min',s:[`Vergelijk elk bedrag, percentage en jaartal op je slides met het Word-voorstel en de notities`,`Bonus: plak de grafiek uit Excel op een slide en controleer of de cijfers overeenkomen`]}]}];
+
+const REF=[['Excel','Data samenvatten · tekst classificeren · formules uitleggen · draaitabel en grafiek','Totalen · voorspellingen · interpretatie · rommelige data','Enige bron voor audit-cijfers · beslissingen over personen · gevoelige data buiten beleid'],['Word','Eerste concept · herschrijven · samenvatten · tabel uit tekst','Feiten en cijfers · externe documenten · vak buiten eigen kennis','Contracten zonder jurist · gevoelige persoonlijke berichten · vertrouwelijke data buiten beleid'],['PowerPoint','Deck uit document · slide visueler · sprekersnotities · kritische vragen','Cijfers en bronnen · titels · afbeeldingen · huisstijl','Strategie uitbesteden · niet doornemen vóór presenteren · vertrouwelijke info buiten beleid']];
+const LIB=[`Stel me eerst drie vragen die je nodig hebt om dit goed te doen, voordat je begint.`,`Geef drie varianten: kort, gemiddeld en uitgebreid.`,`Wat mis je nog in dit resultaat? Waar heb je aannames gedaan?`,`Welke 3 dingen vallen op in deze tabel? Gebruik alleen de gegevens in de tabel.`,`Voeg een kolom toe die [criterium] bepaalt voor elke rij. Leg uit welke regels je gebruikt.`,`Markeer in rood alle rijen waar [voorwaarde].`,`Schrijf een [type document] voor [doelgroep] op basis van de tekst hieronder. Gebruik alleen deze informatie. Maximaal [lengte]. Toon: [toon].`,`Herschrijf deze alinea korter en duidelijker, behoud alle feiten.`,`Vat dit document samen in 5 punten en geef de acties met eigenaar en termijn.`,`Maak een presentatie van maximaal [aantal] slides op basis van [document]. Doel: [doel]. Publiek: [publiek]. Gebruik de huisstijl.`,`Welke vragen of bezwaren zou [rol] hebben na deze presentatie? Wat ontbreekt?`];
+const FIX=[['Geen Copilot-pictogram','Bestand in OneDrive of SharePoint? AutoOpslaan aan? Office bijgewerkt? Licentie toegewezen? Vraag de trainer.'],['Copilot ziet de Excel-data niet','Maak er een tabel van (Ctrl+T), geen lege rijen of kolommen, kopteksten aanwezig.'],['Copilot geeft alleen tekst','Staat in Chat-modus: kies bewerken toestaan of Agent-modus, of je beheerder heeft het uitgezet.'],['Resultaat te algemeen','Voeg context en bron toe en stuur bij met een concrete vervolgvraag.'],['Ongewenste wijziging','Ongedaan maken (Ctrl+Z) of Bestand > Info > Versiegeschiedenis.']];
+
+const T=[];let S={};try{S=JSON.parse(localStorage.getItem('cws')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('cws',JSON.stringify(S))}catch(e){}};
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const reg=t=>T.push(t)-1;
+const cpb=(t,l)=>`<button class="s" data-t="${reg(t)}" data-l="${l}">${l}</button>`;
+const apps=a=>`<a class="b" href="${L[a][0]}" target="_blank" rel="noopener">Open ${N[a]} (web)</a><a class="b s" href="${L[a][1]}">Desktop-app</a><a class="b s" href="${CHAT}" target="_blank" rel="noopener">Copilot Chat</a>`;
+const chk=(id,m,txt)=>`<li><label><input type="checkbox" data-id="${id}" data-m="${m}"><span>${esc(txt)}</span></label></li>`;
+const col=(c,t,a)=>`<div class="col" style="border-color:var(--${c})"><b>${t}</b><ul>${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`;
+const fld=(k,ph)=>`<input type="text" data-k="${k}" placeholder="${ph}">`;
+
+let h=`<h2 id="start">Start</h2><p class="mut">Werk in je eigen tempo. Vink stappen af, kopieer prompts met één klik en open de app via de knoppen. Je voortgang blijft bewaard in deze browser.</p>
+<div class="op"><h3>Voorbereiding</h3><ul class="st">${['Bestanden staan in OneDrive of SharePoint, AutoOpslaan staat aan','Ik werk steeds op een eigen kopie','Ik zie het Copilot-pictogram (zo niet: meld het aan de trainer)'].map((x,i)=>chk('s0-'+i,'s',x)).join('')}</ul><a class="b" href="${CHAT}" target="_blank" rel="noopener">Open Copilot Chat</a></div>
+<div class="op"><h3>De prompt-formule</h3><p><span class="chip">DOEL</span>wat moet er gebeuren?<br><span class="chip">CONTEXT</span>voor wie, waarom, welke situatie?<br><span class="chip">BRON</span>welke data, bestand of tekst?<br><span class="chip">VERWACHTING</span>formaat, lengte, toon</p>
+<ul class="st">${chk('s1-0','s','Oefening: ik heb de prompt "Schrijf een e-mail aan een klant" verbeterd met de vier onderdelen')}</ul></div>
+<div class="op"><h3>Gouden regels</h3><ul><li>Jij blijft verantwoordelijk: je naam staat eronder.</li><li>Controleer cijfers, namen, bronnen en regelgeving.</li><li>Houd je aan het beleid over welke informatie waar in mag.</li><li>Werk op een kopie als Copilot zelf bewerkt.</li><li>Gebruik Ongedaan maken en Versiegeschiedenis.</li></ul>
+<div class="cols">${col('g','🟢 Groen',['Sterk in: steekproef volstaat'])}${col('o','🟠 Oranje',['Helpt, jij controleert aantoonbaar'])}${col('r','🔴 Rood',['Niet doen, of alleen via procedure'])}</div></div>`;
+M.forEach(m=>{
+ h+=`<h2 id="${m.id}">${m.naam} <span class="t">${m.tijd}</span></h2><p class="mut">${m.intro}</p><div>${apps(m.app)}</div>`;
+ m.ops.forEach((o,i)=>{
+  h+=`<section class="op"><h3>${i?'Opdracht '+i+' – ':''}${o.t}<span class="t">${o.m}</span></h3><ul class="st">${o.s.map((x,j)=>chk(m.id+i+'-'+j,m.id,x)).join('')}</ul>`;
+  (o.p||[]).forEach(p=>{h+=`<div class="pr">${p[0]?`<small>${p[0]}</small>`:''}<pre>${esc(p[1])}</pre>${cpb(p[1],'Kopieer prompt')}</div>`});
+  if(o.copy)h+=cpb(o.copy[0]=='data'?DATA:NOTES,o.copy[1]);
+  (o.links||[]).forEach(l=>{h+=`<a class="b s" href="${l[1]}" target="_blank" rel="noopener">${l[0]}</a>`});
+  h+=`${apps(m.app)}</section>`;});
+ h+=`<h3>Wanneer wel, wanneer niet: ${m.naam}</h3><div class="cols">${col('g','🟢 Wel',m.w)}${col('o','🟠 Met controle',m.o)}${col('r','🔴 Beter niet',m.n)}</div>`;});
+h+=`<h2 id="a">Afsluiting</h2><div class="op"><h3>Mijn stoplichtkaart</h3><div class="tw"><table><tr><th>Mijn taak</th><th>Kleur</th><th>Prompt en controle</th></tr>${[1,2,3].map(i=>`<tr><td>${fld('t'+i,'Taak '+i)}</td><td><select data-k="c${i}"><option value="">–</option><option>🟢 Groen</option><option>🟠 Oranje</option><option>🔴 Rood</option></select></td><td>${fld('p'+i,'Hoe pak ik dit aan en controleer ik het?')}</td></tr>`).join('')}</table></div></div>
+<div class="op"><h3>Mijn actie voor volgende week</h3><p class="mut">Volgende week gebruik ik Copilot in [app] om [taak] te doen. Ik controleer het resultaat door [manier].</p><textarea rows="3" data-k="actie"></textarea><ul class="st">${chk('a0','a','Ik heb deze actie in mijn agenda gezet')}</ul></div>
+<h2 id="n">Naslag</h2><div class="op"><h3>Spiekbrief: wanneer wel, wanneer niet</h3><div class="tw"><table><tr><th></th><th>🟢 Wel</th><th>🟠 Met controle</th><th>🔴 Niet</th></tr>${REF.map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('')}</table></div><p class="mut">Altijd: Doel – Context – Bron – Verwachting · werk op een kopie · controleer bij de bron · jij blijft verantwoordelijk.</p></div>
+<div class="op"><h3>Promptbibliotheek</h3>${LIB.map(x=>`<div class="pr"><pre>${esc(x)}</pre>${cpb(x,'Kopieer prompt')}</div>`).join('')}</div>
+<div class="op"><h3>Als iets niet werkt</h3><div class="tw"><table>${FIX.map(f=>`<tr><td><b>${f[0]}</b></td><td>${f[1]}</td></tr>`).join('')}</table></div></div>
+<div class="op"><h3>Oefenmateriaal opnieuw kopiëren</h3>${cpb(DATA,'Kopieer data (Excel)')}${cpb(NOTES,'Kopieer notities (Word)')}</div>
+<button class="reset" id="rs">Wis mijn voortgang</button>`;
+document.getElementById('app').innerHTML=h;
+const nm={s:'Start',x:'Excel',w:'Word',p:'PowerPoint',a:'Afsluiting'};
+document.getElementById('nav').innerHTML=[['start','Start','s'],['x','Excel','x'],['w','Word','w'],['p','PowerPoint','p'],['a','Afsluiting','a'],['n','Naslag','']].map(n=>`<a href="#${n[0]}" data-n="${n[2]}">${n[1]}</a>`).join('');
+const boxes=[...document.querySelectorAll('input[data-id]')];
+boxes.forEach(b=>{b.checked=!!S[b.dataset.id]});
+document.querySelectorAll('[data-k]').forEach(f=>{if(S['k'+f.dataset.k])f.value=S['k'+f.dataset.k]});
+function upd(){const d=boxes.filter(b=>b.checked).length;document.getElementById('tot').textContent=d+'/'+boxes.length;document.getElementById('pb').style.width=(100*d/boxes.length)+'%';
+ document.querySelectorAll('#nav a[data-n]').forEach(a=>{const k=a.dataset.n;if(!k)return;const g=boxes.filter(b=>b.dataset.m==k);const c=g.filter(b=>b.checked).length;a.textContent=nm[k]+' '+c+'/'+g.length+(c==g.length?' ✓':'')})}
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.id){S[t.dataset.id]=t.checked||undefined;save();upd()}else if(t.dataset.k){S['k'+t.dataset.k]=t.value;save()}});
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset.k){S['k'+t.dataset.k]=t.value;save()}});
+document.addEventListener('click',async e=>{const b=e.target.closest('button[data-t]');if(!b)return;const txt=T[+b.dataset.t];let ok=false;
+ try{await navigator.clipboard.writeText(txt);ok=true}catch(x){try{const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();ok=document.execCommand('copy');a.remove()}catch(y){}}
+ b.textContent=ok?'Gekopieerd ✓':'Selecteer en kopieer zelf';setTimeout(()=>b.textContent=b.dataset.l,1800)});
+document.getElementById('rs').onclick=()=>{if(confirm('Weet je zeker dat je al je voortgang wilt wissen?')){S={};save();location.reload()}};
+upd();
+</script>
+
+<footer class="w">
+  <div style="display: flex; justify-content: space-between; flex-wrap: wrap; border-top: 1px solid var(--bd); padding-top: 20px; margin-top: 40px; color: var(--mu); font-size: .85rem; padding-bottom: 40px;">
+    <div>&copy; 2026 Noppa Solutions & Consultants. Alle rechten voorbehouden.</div>
+    <div style="display: flex; gap: 15px;">
+      <a href="#" style="color: var(--tx); text-decoration: none;">Privacy</a>
+      <a href="#" style="color: var(--tx); text-decoration: none;">Cookie Voorwaarden</a>
+      <a href="#" style="color: var(--tx); text-decoration: none;">Toegankelijkheid</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
