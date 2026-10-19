@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noppa • Intake & Dagelijkse Taken</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --noppa-primary: #0F172A;
+      --noppa-primary-light: #1E293B;
+      --noppa-accent: #2563EB;
+      --noppa-accent-subtle: #EFF6FF;
+      --noppa-accent-hover: #1D4ED8;
+      --noppa-emerald: #059669;
+      --bg-page: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+      --border-color: #CBD5E1;
+      --border-focus: #2563EB;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08);
+      --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 2.5rem 1rem;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      background-color: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .brand-header {
+      background: linear-gradient(135deg, var(--noppa-primary) 0%, var(--noppa-primary-light) 100%);
+      color: #FFFFFF;
+      padding: 2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid var(--noppa-accent);
+    }
+
+    .brand-logo h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .brand-dot {
+      width: 9px;
+      height: 9px;
+      background-color: var(--noppa-accent);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .brand-logo p {
+      font-size: 0.8rem;
+      color: #94A3B8;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .badge {
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      background-color: rgba(37, 99, 235, 0.25);
+      color: #93C5FD;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .content-body {
+      padding: 2.5rem;
+    }
+
+    .intro-block {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #E2E8F0;
+      padding-bottom: 1.5rem;
+    }
+
+    .intro-block h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--noppa-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .intro-block p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Formulier secties */
+    .form-section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--noppa-primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-number {
+      background-color: var(--noppa-accent-subtle);
+      color: var(--noppa-accent);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .field-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--noppa-primary-light);
+      margin-bottom: 0.35rem;
+    }
+
+    .field-hint {
+      font-size: 0.775rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      background-color: #FFFFFF;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* Knoppenbalk */
+    .action-bar {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #E2E8F0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.4rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--noppa-accent);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--noppa-accent-hover);
+    }
+
+    .btn-secondary {
+      background-color: #F1F5F9;
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background-color: #E2E8F0;
+    }
+
+    .brand-footer {
+      background-color: #F8FAFC;
+      border-top: 1px solid #E2E8F0;
+      padding: 1.25rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .content-body {
+        padding: 1.5rem;
+      }
+      .brand-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header class="brand-header">
+      <div class="brand-logo">
+        <h1>NOPPA<span class="brand-dot"></span></h1>
+        <p>SOLUTIONS & CONSULTANTS</p>
+      </div>
+      <span class="badge">Intake & Vaardigheid Setup</span>
+    </header>
+
+    <main class="content-body">
+      <div class="intro-block">
+        <h2>Dagelijkse Werkzaamheden & Taken Intake</h2>
+        <p>Vul onderstaande vragen in. De verzamelde antwoorden vormen het profiel en de logica voor jouw persoonlijke vaardigheid (skill).</p>
+      </div>
+
+      <form id="skillForm">
+        <!-- SECTIE 1 -->
+        <div class="form-section">
+          <div class="section-title">
+            <span class="section-number">1</span>
+            <span>Rol, Domein & Context</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="field-group">
+              <label for="role">Jouw Rol / Functietitel</label>
+              <input type="text" id="role" placeholder="bijv. Senior M365 Consultant & Architect">
+            </div>
+            <div class="field-group">
+              <label for="environment">Belangrijkste Tools / Ecosystemen</label>
+              <input type="text" id="environment" placeholder="bijv. Microsoft 365, Copilot, SharePoint, Purview">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="audience">Doelgroep & Stakeholders</label>
+            <span class="field-hint">Met wie communiceer of overleg je primair?</span>
+            <input type="text" id="audience" placeholder="bijv. IT Managers, C-level, Ambassadeurs, Eindgebruikers">
+          </div>
+        </div>
+
+        <!-- SECTIE 2 -->
+        <div class="form-section">
+          <div class="section-title">
+            <span class="section-number">2</span>
+            <span>Dagelijkse Taken & Repetitief Werk</span>
+          </div>
+
+          <div class="field-group">
+            <label for="dailyTasks">Wat zijn je belangrijkste dagelijkse routines?</label>
+            <span class="field-hint">Welke 3 tot 5 taken doe je vrijwel elke dag of week?</span>
+            <textarea id="dailyTasks" placeholder="bijv. 
+1. Klantvragen structureren naar actiepunten
+2. M365 documentatie & governance policies opstellen
+3. Voorbereiden van adoptie- en Copilot-trainingen
+4. Dagplanning en actie-opvolging bewaken"></textarea>
+          </div>
+
+          <div class="field-group">
+            <label for="painPoints">Wat kost momenteel te veel tijd of denkwerk?</label>
+            <span class="field-hint">Waar kan de vaardigheid je het meeste uitzoekwerk of schrijfwerk uit handen nemen?</span>
+            <textarea id="painPoints" placeholder="bijv. Ruwe aantekeningen omzetten in strakke mailings of adviesdocumenten, prioriteren van ad-hoc verzoeken."></textarea>
+          </div>
+        </div>
+
+        <!-- SECTIE 3 -->
+        <div class="form-section">
+          <div class="section-title">
+            <span class="section-number">3</span>
+            <span>Werkstijl & Outputformaat</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="field-group">
+              <label for="tone">Gewenste Toon & Communicatiestijl</label>
+              <select id="tone">
+                <option value="To-the-point, pragmatisch en deskundig (Noppa standaard)">To-the-point, pragmatisch en deskundig</option>
+                <option value="Strategisch en adviserend">Strategisch en adviserend</option>
+                <option value="Informeel, vlot en coachend">Informeel, vlot en coachend</option>
+                <option value="Formeel en compliance-gericht">Formeel en compliance-gericht</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="outputFormat">Gewenste Outputvorm</label>
+              <select id="outputFormat">
+                <option value="Directe actielijsten & tabellen (geen inleidingen)">Directe actielijsten & tabellen (geen inleidingen)</option>
+                <option value="Kant-en-klare mails en communicatie">Kant-en-klare mails en communicatie</option>
+                <option value="Geprioriteerd dagoverzicht (Urgent vs Gepland)">Geprioriteerd dagoverzicht (Urgent vs Gepland)</option>
+                <option value="Volledig uitgewerkte notities en documentatie">Volledig uitgewerkte notities en documentatie</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="hardRules">Harde randvoorwaarden / No-Go's</label>
+            <span class="field-hint">Wat mag de vaardigheid absoluut NIET doen?</span>
+            <input type="text" id="hardRules" placeholder="bijv. Geen buzzwords, geen klantnamen noemen, altijd AVG/compliance meewegen">
+          </div>
+        </div>
+
+        <!-- ACTIES -->
+        <div class="action-bar">
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('skillForm').reset()">Wissen</button>
+          <button type="button" class="btn btn-primary" onclick="copyPromptSummary()">Kopieer als Vaardigheidsprompt</button>
+        </div>
+      </form>
+    </main>
+
+    <footer class="brand-footer">
+      <div><strong>Noppa Solutions & Consultants</strong> • Grasso, 's-Hertogenbosch</div>
+      <div>www.noppa.nl</div>
+    </footer>
+  </div>
+
+  <script>
+    function copyPromptSummary() {
+      const role = document.getElementById('role').value || '[Niet ingevuld]';
+      const environment = document.getElementById('environment').value || '[Niet ingevuld]';
+      const audience = document.getElementById('audience').value || '[Niet ingevuld]';
+      const dailyTasks = document.getElementById('dailyTasks').value || '[Niet ingevuld]';
+      const painPoints = document.getElementById('painPoints').value || '[Niet ingevuld]';
+      const tone = document.getElementById('tone').value;
+      const outputFormat = document.getElementById('outputFormat').value;
+      const hardRules = document.getElementById('hardRules').value || '[Geen specifieke randvoorwaarden opgegeven]';
+
+      const promptText = `### GEBRUIKERSPROFIEL & TAAKOMGEVING VOOR VAARDIGHEID\n\n` +
+        `**Rol:** ${role}\n` +
+        `**Domein / Tools:** ${environment}\n` +
+        `**Doelgroep:** ${audience}\n\n` +
+        `**Dagelijkse Routines & Taken:**\n${dailyTasks}\n\n` +
+        `**Knelpunten / Wat overgenomen moet worden:**\n${painPoints}\n\n` +
+        `**Toon & Vorm:**\n- Stijl: ${tone}\n- Standaard Output: ${outputFormat}\n- Randvoorwaarden: ${hardRules}`;
+
+      navigator.clipboard.writeText(promptText).then(() => {
+        alert('De ingevulde gegevens zijn gekopieerd naar je klembord! Plak deze in de chat om de definitieve vaardigheid te genereren.');
+      }).catch(err => {
+        console.error('Kopiëren mislukt:', err);
+      });
+    }
+  </script>
+
+</body>
+</html>
